@@ -7,13 +7,14 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.Connection.Request;
 import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import com.jsoup.abs.BaseJsoupService;
 import com.jsoup.common.constant.HttpHeaderConstant;
+import com.jsoup.common.utils.CertificatesUtil;
 
 public class BaseJsoupServiceImpl implements BaseJsoupService{
 	
@@ -30,29 +31,36 @@ public class BaseJsoupServiceImpl implements BaseJsoupService{
 	*/
 	@Override
 	 public Map<String, Object> httpGet(String url,Map<String,String> paramMap,String cookie) throws IOException{
-	        
-		Map<String, Object>  data = new HashMap<String, Object>();
-			//获取请求连接
-	        Connection con = Jsoup.connect(url);
-	        //请求头设置，特别是cookie设置
-	        con = setHeaderParam(con);
-	      //遍历生成参数
-	        if(paramMap!=null){
-	            for (Entry<String, String> entry : paramMap.entrySet()) {     
-	               //添加参数
-	                con.data(entry.getKey(), entry.getValue());
-	               } 
-	        }
-	        if(StringUtils.isNotBlank(cookie)){
-	        	con.header("Cookie", cookie);
-	        }
-	        //解析请求结果
-	        Document doc=con.get(); 
-	        data.put("doc", doc);
-	        data.put("con", con);
-	       // System.out.println(doc.html());
-	        //返回内容
-	        return data;
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		// 忽略证书
+		try {
+			CertificatesUtil.trustAllHttpsCertificates();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return data;
+		}
+		// 获取请求连接
+		Connection con = Jsoup.connect(url);
+		// 请求头设置，特别是cookie设置
+		con = setHeaderParam(con);
+		// 遍历生成参数
+		if (paramMap != null) {
+			for (Entry<String, String> entry : paramMap.entrySet()) {
+				// 添加参数
+				con.data(entry.getKey(), entry.getValue());
+			}
+		}
+		if (StringUtils.isNotBlank(cookie)) {
+			con.header("Cookie", cookie);
+		}
+		// 解析请求结果
+		Document doc = con.get();
+		data.put("doc", doc);
+		data.put("con", con);
+		// System.out.println(doc.html());
+		// 返回内容
+		return data;
 	        
 	    }
 	
@@ -72,6 +80,14 @@ public class BaseJsoupServiceImpl implements BaseJsoupService{
 	public Map<String, Object> httpPost(String url,Map<String, String> paramMap, String cookie) throws IOException {
 		Map<String, Object>  data = new HashMap<String, Object>();
 		//获取请求连接
+		// 忽略证书
+		try {
+			CertificatesUtil.trustAllHttpsCertificates();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return data;
+		}
+		
        Connection con = Jsoup.connect(url);
        //请求头设置，特别是cookie设置
        con = setHeaderParam(con);
