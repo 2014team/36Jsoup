@@ -2,13 +2,21 @@ package com.jsoup.common.utils;
 
 /**
  * @ClassName: Certificates
- * @Description: 证书（作用请求忽略证书）
+ * @Description: 证书工具类（作用请求忽略证书）
  * @author zhuzq
  * @date 2017-11-14 下午6:39:39
  */
 public class CertificatesUtil {
+	
+	private static CertificatesUtil instance = new CertificatesUtil();
+	
+	private CertificatesUtil(){}  
+    
+    public static CertificatesUtil getInstance() {  
+        return instance;  
+    }  
 
-	public static void trustAllHttpsCertificates() throws Exception {
+	public void trustAllHttpsCertificates() throws Exception {
 		javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[1];
 		javax.net.ssl.TrustManager tm = new miTM();
 		trustAllCerts[0] = tm;

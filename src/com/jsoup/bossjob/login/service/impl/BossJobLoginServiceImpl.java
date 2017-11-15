@@ -16,6 +16,7 @@ import com.jsoup.bossjob.login.domain.BossJobSuccessInfo;
 import com.jsoup.bossjob.login.service.BossJobLoginService;
 import com.jsoup.bossjob.login.vo.BossJobLoginVO;
 import com.jsoup.common.constant.UrlConstant;
+import com.jsoup.common.utils.CertificatesUtil;
 import com.jsoup.common.utils.GsonUtil;
 @Service
 public class BossJobLoginServiceImpl extends BaseJsoupServiceImpl implements BossJobLoginService{
@@ -34,7 +35,8 @@ public class BossJobLoginServiceImpl extends BaseJsoupServiceImpl implements Bos
 		BossJobLoginVO bean =null;
 		try {
 			//获取请求连接
-	        Connection con = Jsoup.connect(url);
+	        Map<String,Object>	data = httpPost(url, null, null);
+	        Connection con = (Connection) data.get("con");
 	        //插入cookie（头文件形式）
 	        con = setHeaderParam(con);
 	        Document doc = con.post(); 

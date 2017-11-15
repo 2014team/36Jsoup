@@ -18,6 +18,8 @@ import com.jsoup.common.utils.CertificatesUtil;
 
 public class BaseJsoupServiceImpl implements BaseJsoupService{
 	
+	private CertificatesUtil certificates = CertificatesUtil.getInstance();
+	
 	/**
 	* @Title: httpGet
 	* @Description: Get请求
@@ -35,7 +37,7 @@ public class BaseJsoupServiceImpl implements BaseJsoupService{
 
 		// 忽略证书
 		try {
-			CertificatesUtil.trustAllHttpsCertificates();
+			certificates.trustAllHttpsCertificates();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return data;
@@ -76,13 +78,12 @@ public class BaseJsoupServiceImpl implements BaseJsoupService{
 	* @return
 	* @throws IOException
 	*/
-	@Override
 	public Map<String, Object> httpPost(String url,Map<String, String> paramMap, String cookie) throws IOException {
 		Map<String, Object>  data = new HashMap<String, Object>();
 		//获取请求连接
 		// 忽略证书
 		try {
-			CertificatesUtil.trustAllHttpsCertificates();
+			certificates.trustAllHttpsCertificates();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return data;
