@@ -67,7 +67,7 @@
 	
 	<!--配置一个切入点-->
 	<aop:config>
-    	<aop:pointcut id="servicePointcut"   expression="execution(* com.jsoup.*.service.*.*(..))"/> 
+    	<aop:pointcut id="servicePointcut"   expression="execution(* com.jsoup.*.service.*.*(..)) or execution(* com.jsoup.*.*.service.*.*(..))"/> 
     	<aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointcut"/>
     </aop:config>
 
@@ -82,7 +82,7 @@
 
 	<!-- 通过扫描器的方式自动装配mapper -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.jsoup.*.dao" />
+		<property name="basePackage" value="com.jsoup.*.dao,com.jsoup.*.*.dao" />
 	</bean>
 	
 	<!-- 文件上传 -->
